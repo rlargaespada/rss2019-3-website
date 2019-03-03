@@ -1,7 +1,6 @@
-# RSS Website Template
+# RSS Team 3
 
-This is a basic template for you to use for your team website.
-
+Abbie Lee (abbielee@mit.edu), Alex Cuellar (alexcuel@mit.edu), Kayla Holman (kholman@mit.edu), Kyle Morgenstein (kylem73@mit.edu), Raul Largaespada(rlargaes@mit.edu)
 
 ## Modifying the template
 
@@ -38,7 +37,7 @@ You should now be able to see the template if you navigate to:
     https://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/
 
 
-Now in order to modify the template, clone your fork and read on to the next section. 
+Now in order to modify the template, clone your fork and read on to the next section.
 
 
 ## Using the template
