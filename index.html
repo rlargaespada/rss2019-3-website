@@ -1,83 +1,154 @@
-<!DOCTYPE HTML><html><head><title>RSS Team 3</title><link rel="stylesheet" type="text/css" href="./css/style.css"><script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']],displayMath: [['$$','$$']],skipTags: ["script","noscript","style","textarea","code"]},TeX: {equationNumbers: {autoNumber: "AMS"}}});</script><script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script></head><body><div id="main"><div id="logo"><div id="logo_text"><h1><a href="."><span class="logo_colour">RSS Team 3</span></a></h1><h2>MIT Spring 2019</h2></div></div><div id="header"><div id="menubar"><ul id="menu"><li class="selected"><a href=".">Home</a></li><li class=""><a href="./labs">Labs</a></li><li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Video</a></li><li><a href="https://github.mit.edu/rss2019-3">Github</a></li></ul></div></div><div id="site_content"><div id="content"><h1>RSS Team 3</h1>
-<script type="text/javascript" src="./main.js"></script>
-<h2>Team Members</h2>
-<p>Abbie Lee (abbielee@mit.edu), Alex Cuellar (alexcuel@mit.edu), Kayla Holman (kholman@mit.edu), Kyle Morgenstein (kylem73@mit.edu), Raul Largaespada(rlargaes@mit.edu)
-</p>
-<h2>About Us</h2>
-<h4>Abbie Lee</h4>
-<h4>Alex Cuellar</h4>
-<h4>Kayla Holman</h4>
-    <p>
-        Hi! My name's Kayla and I'm a junior studying 2A-6, with specific interests in robotics and autonomous control. 
-        I'm SUPER excited to make a robot that will be smarter than I am!
-    </p>
-    
-<h4>Kyle Morgenstein</h4>
-    
-<p>
-    My name's Kyle and I'm a junior studying 12 and 16-eng, with a focus on robotics for space exploration. Stoked to make this car go FAST!!
-</p>
-<h4>Raul Largaespada</h4>
-<p>
-    Hi, I'm Raul and I'm a junior studying 16 and 6-2, with a focus on flight software and GNC. I'm excited to be a part of the
-    course this spring and am looking forward to learning a lot!
-</p>
+<!DOCTYPE HTML>
+<html>
 
-<h2>Modifying the template</h2>
-You can change the template design as much as you want - in fact we want you to!
-This website is pretty boring right now. Use pictures, videos, gifs and stories from your racecar experience
-to make this website pop!
-There are a couple constraints however. First, your lab reports must remain accessible at these links:
-<br/><br/><pre><code>https:://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/labs/[LAB_NUMBER]
-</code></pre>
-<br/><br/>Also for the sake of the graders, please make sure that the text remains <strong>black on white</strong>.
-<br/><br/>And finally don't add too much javascript/bloat.
-We're going to need to go through a whole bunch of these websites rapidly
-and we don't want it to feel like learning modules.
-<br/><br/><h2>Setting up the template</h2>
-You will be hosting this template using <a href="https://pages.github.com/">github pages</a>.
-If you haven't already done so, have your team make an organization on <a href="github.mit.edu">github.mit.edu</a>.
-Make sure your organization is named <code>rss2019-#</code> where "#" is your team number (not your car number!). Do not pad the number with zeros.
-<br/><br/>Then fork this repo into your organization.
-In the settings page of the forked repo scroll down to the "Github Pages" section. Under "Source", click the dropdown menu and select "master branch" then hit save.
-You should now be able to see the template if you navigate to:
-<br/><br/><pre><code>https://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/
-</code></pre>
-<br/><br/>Now in order to modify the template, clone your fork and read on to the next section.
-<br/><br/><h2>Using the template</h2>
-We've made this template as straightforward as we could to use.
-You can edit this using markdown which is the same language the lab reports are written in.
-It is very simple and there are plenty of guides online about how to use it.
-<br/><br/>We've written a small python script that takes your markdown files and turns the into HTML files for the web.
-Each markdown file is contained in its own directory and after it is turned into HTML you will be able to view that page at:
-<br/><br/><pre><code>https://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/my/directory
-</code></pre>
-<br/><br/>Running the python script requires a small library for converting markdown, so first run:
-<br/><br/><pre><code>sudo apt-get install python3-pip
-</code></pre>
-<pre><code>sudo pip3 install mistune
-</code></pre>
-<br/><br/>Then, if for example you wanted to edit your lab 3 report you would do the following:
-<br/><br/><pre><code># Edit lab 3
-</code></pre>
-<pre><code>vim website/labs/3/README.md
-</code></pre>
-<br/><br/><pre><code># Run the python script to convert to HTML
-</code></pre>
-<pre><code>./make.py
-</code></pre>
-<br/><br/><pre><code># Stage, commit and push your changes
-</code></pre>
-<pre><code>git add website/labs/3/README.md website/labs/3/index.html
-</code></pre>
-<pre><code>git commit -m "Edited lab 3"
-</code></pre>
-<pre><code>git push origin master
-</code></pre>
-<br/><br/>The template also supports $\LaTeX$ via mathjax! For inline math use single dollar signs  and for multiline math use use double dollar signs like this:
-$$
-\begin{align}
-e^{i\pi} + 1 = 0
-\end{align}
-$$
-</div></div></div></body></html>
+<head>
+    <title>RSS Team 3</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']],displayMath: [['$$','$$']],skipTags: ["script","noscript","style","textarea","code"]},TeX: {equationNumbers: {autoNumber: "AMS"}}});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/javascript" src="./main.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="navbar">
+            <a id = "nav_home" href="."><b>RSS Team 3</b> MIT Spring 2019</a>
+            <ul id="nav_list">
+                <li><a href="https://github.mit.edu/rss2019-3">Github</a></li>
+                <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Videos</a></li>
+                <li><a href="./labs">Labs</a></li>
+            </ul>
+        </div>
+
+        <div id="logo" style="display:none">
+            <div id="logo_text">
+                <h1><a href="."><span class="logo_colour">RSS Team 3</span></a></h1>
+                <h2>MIT Spring 2019</h2></div>
+        </div>
+        <div id="header">
+            <div id="menubar">
+                <ul id="menu">
+                    <li class="selected"><a href=".">Home</a></li>
+                    <li class=""><a href="./labs">Labs</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Video</a></li>
+                    <li><a href="https://github.mit.edu/rss2019-3">Github</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="site_content">
+            <header id="image_header" class="header_footer">
+                <img class="banner_image" src="./img/MIT.jpg" >
+                <div class="banner_image_label">
+                    <h1>RSS Team 3</h1>
+                </div>
+            </header>
+            <div id="content">
+                <h2 class="section_heading">Team Members</h2>
+                </p>
+                <div class="team_member_bio">
+                    <h4>Abbie Lee</h4>
+                    <p class="contact_info">abbielee@mit.edu</p>
+                    <p>Test bio Test bio Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                            Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                            Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                    </p>
+                </div>
+                <div class="team_member_bio">
+                    <h4>Alex Cuellar</h4>
+                    <p class="contact_info">alexcuel@mit.edu</p>
+                    <p>Test bio Test bio Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                            Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                            Test bio Test bio Test bio Test bio Test bio Test bio Test bio 
+                    </p>
+                </div>
+                <div class="team_member_bio">
+                    <h4>Kayla Holman</h4>
+                    <p class="contact_info">kholman@mit.edu</p>
+                    <p>Hi! My name's Kayla and I'm a junior studying 2A-6, with specific interests in robotics and autonomous control. 
+                        I'm SUPER excited to make a robot that will be smarter than I am!
+                    </p>
+                </div>
+                <div class="team_member_bio">
+                    <h4>Kyle Morgenstein</h4>
+                    <p class="contact_info">kylem73@mit.edu</p>
+                    <p>My name's Kyle and I'm a junior studying 12 and 16-eng, with a focus on robotics for space exploration. Stoked 
+                        to make this car go FAST!!
+                    </p>
+                </div>
+                <div class="team_member_bio">
+                    <img src="./img/Raul_HS.jpg" class="headshot">
+                    <h4>Raul Largaespada</h4>
+                    <p class="contact_info">rlargaes@mit.edu</p>
+                    <p>Hi, I'm Raul and I'm a junior studying 16 and 6-2, with a focus on flight software and GNC. I'm excited to be a part of the
+                            course this spring and am looking forward to learning a lot!
+                    </p>
+                </div>
+            </div>
+            <div id="template_content" style="display:none">
+                <h2>Modifying the template</h2>
+                You can change the template design as much as you want - in fact we want you to!
+                This website is pretty boring right now. Use pictures, videos, gifs and stories from your racecar experience
+                to make this website pop!
+                There are a couple constraints however. First, your lab reports must remain accessible at these links:
+                <br/><br/><pre><code>https:://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/labs/[LAB_NUMBER]
+                </code></pre>
+                <br/><br/>Also for the sake of the graders, please make sure that the text remains <strong>black on white</strong>.
+                <br/><br/>And finally don't add too much javascript/bloat.
+                We're going to need to go through a whole bunch of these websites rapidly
+                and we don't want it to feel like learning modules.
+                <br/><br/><h2>Setting up the template</h2>
+                You will be hosting this template using <a href="https://pages.github.com/">github pages</a>.
+                If you haven't already done so, have your team make an organization on <a href="github.mit.edu">github.mit.edu</a>.
+                Make sure your organization is named <code>rss2019-#</code> where "#" is your team number (not your car number!). Do not pad the number with zeros.
+                <br/><br/>Then fork this repo into your organization.
+                In the settings page of the forked repo scroll down to the "Github Pages" section. Under "Source", click the dropdown menu and select "master branch" then hit save.
+                You should now be able to see the template if you navigate to:
+                <br/><br/><pre><code>https://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/
+                </code></pre>
+                <br/><br/>Now in order to modify the template, clone your fork and read on to the next section.
+                <br/><br/><h2>Using the template</h2>
+                We've made this template as straightforward as we could to use.
+                You can edit this using markdown which is the same language the lab reports are written in.
+                It is very simple and there are plenty of guides online about how to use it.
+                <br/><br/>We've written a small python script that takes your markdown files and turns the into HTML files for the web.
+                Each markdown file is contained in its own directory and after it is turned into HTML you will be able to view that page at:
+                <br/><br/><pre><code>https://github.mit.edu/pages/rss2019-[TEAM_NUMBER]/website/my/directory
+                </code></pre>
+                <br/><br/>Running the python script requires a small library for converting markdown, so first run:
+                <br/><br/><pre><code>sudo apt-get install python3-pip
+                </code></pre>
+                <pre><code>sudo pip3 install mistune
+                </code></pre>
+                <br/><br/>Then, if for example you wanted to edit your lab 3 report you would do the following:
+                <br/><br/><pre><code># Edit lab 3
+                </code></pre>
+                <pre><code>vim website/labs/3/README.md
+                </code></pre>
+                <br/><br/><pre><code># Run the python script to convert to HTML
+                </code></pre>
+                <pre><code>./make.py
+                </code></pre>
+                <br/><br/><pre><code># Stage, commit and push your changes
+                </code></pre>
+                <pre><code>git add website/labs/3/README.md website/labs/3/index.html
+                </code></pre>
+                <pre><code>git commit -m "Edited lab 3"
+                </code></pre>
+                <pre><code>git push origin master
+                </code></pre>
+                <br/><br/>The template also supports $\LaTeX$ via mathjax! For inline math use single dollar signs  and for multiline math use use double dollar signs like this:
+                $$
+                \begin{align}
+                e^{i\pi} + 1 = 0
+                \end{align}
+                $$
+            </div>
+            <footer id="image_footer" class="header_footer">
+                <img class="banner_image" src="./img/Boston_Back_Bay_reflection.jpg" style="top: -75px">
+                <div class="banner_image_label">
+                    <h1>MIT Spring 2019</h1>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body></html>

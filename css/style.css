@@ -14,6 +14,7 @@ p
 { padding: 0 0 16px 0;
   line-height: 1.7em;}
 
+
 img
 { border: 0;}
 
@@ -69,12 +70,126 @@ ol
 ol li
 { margin: 0 0 11px 0;}
 
-#main, #header, #logo, #menubar, #site_content, #footer
+#navbar 
+{   position: fixed;
+    width: 100%;
+    background-color: #FFF;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    letter-spacing: 2px;
+    font-size: 15px;
+    height: 50px;
+    z-index: 1;
+}
+
+#navbar a:hover {
+    background-color: rgb(219, 219, 219);
+}
+
+#nav_home
+{
+    float: left;
+    width: auto;
+    border: none;
+    display: block;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin-top: 8.5px;
+    margin-bottom: 8.5px;
+}
+
+#nav_list ul
+{
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    margin-top: 20px;
+    
+}
+
+#nav_list li
+{
+    list-style-type: none;
+    float: right;
+    margin-top: 6.5px;
+    margin-bottom: 6.5px
+
+}
+
+#nav_list li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.banner_image {
+    max-width: 100%;
+    vertical-align: middle;
+    width: 100%;
+    position: relative;
+}
+
+.header_footer {
+    height: 425px;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    width: 100%;
+    
+}
+
+.banner_image_label {
+    position: absolute;
+    top:60%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.banner_image_label h1 {
+    font-size: 60px;
+    color: #ffffff;
+    font-family: Palatino Linotype;
+    letter-spacing: 2px;
+    font-weight: bolder;
+}
+
+.section_heading {
+    border-bottom: 1px solid #ccc!important;
+}
+
+.team_member_bio {
+    width: 18%;
+    float: left;
+    padding: 0 8px;
+}
+
+.team_member_bio h4, p {
+    color: black;
+}
+
+.team_member_bio h4 {
+    padding: 8px 0;
+}
+
+.team_member_bio .contact_info {
+    opacity: .60;
+    padding: 0 0 10px 0;
+}
+
+.headshot {
+    vertical-align: middle;
+    width: 100%;
+}
+
+/*#main, */#header, #logo, #menubar, #site_content, #footer
 { margin-left: auto; 
   margin-right: auto;}
 
 #main
-{ width: 910px;
+{ width: 100%;
   background: url(../img/content.png) repeat-y;}
 
 #header
@@ -157,7 +272,7 @@ ul#menu li a:hover
 { color: #888;}
 
 #site_content
-{ width: 890px;
+{ width: auto;
   overflow: hidden;
   background: #F8F8F8;} 
 
@@ -186,9 +301,9 @@ ul#menu li a:hover
 
 #content
 { text-align: left;
-  width: 600px;
+  width: auto;
   float: left;
-  padding: 20px 0 15px 30px;}
+  padding: 20px 20px 15px 20px;}
 
 #content ul
 { margin: 2px 0 22px 0px;}
