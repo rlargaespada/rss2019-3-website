@@ -301,7 +301,7 @@ ul#menu li a:hover
 
 #content
 { text-align: left;
-  width: auto;
+  width: 100%;
   float: left;
   padding: 20px 20px 15px 20px;}
 
