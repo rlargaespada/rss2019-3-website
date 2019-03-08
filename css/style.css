@@ -164,7 +164,7 @@ ol li
 }
 
 .lab_link {
-    width: 30%;
+    width: 18%;
     float: left;
     padding: 8px;
     height: 200px;
@@ -178,6 +178,8 @@ ol li
 
 .briefing_wrapper {
     float: left;
+    width: 100%;
+    padding: 0 0 16px 0;
 }
 
 .lab_link {position: relative;}
@@ -241,6 +243,8 @@ ol li
     margin: auto;
     font-size: 20px;
     font-family: Palatino Linotype;
+    float: left;
+    width: fit-content;
 }
 
 /*#main, */#header, #logo, #menubar, #site_content, #footer
@@ -479,3 +483,25 @@ table tr td
 { background: #eee;
   color: #555;
   border-top: 1px solid #FFF;}
+
+.lab_report_content {
+    font-family: Palatino Linotype;
+    font-size: 14.5px;
+    max-width: 95%;
+}
+
+.lab_report_image {
+    max-width: 600px;
+    max-height: 500px;
+    display: block;
+    margin: auto;
+    padding-bottom: 8px;
+}
+
+.lab_report_image_small {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+    margin: auto;
+    padding-bottom: 8px;
+}
