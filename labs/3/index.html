@@ -131,7 +131,7 @@
                         <p>Without corner prediction, we found that our car tended to overshoot desired trajectories when going around corners. To allow our car to respond more quickly to oncoming corners, we defined a spatial derivative $dL/dx|_{\pi/2}^{\pi/8}$, which is the change in measured distance to the wall from perpendicular to the racecar's forward-pointing vector to $\pi/8$ before the forward-pointing vector. When $dL/dx > 0$, we know that the more forward part of the scan is reading a larger distance than the perpendicular segment, so we are coming up on a convex corner. When $dL/dx &lt; 0$, we are coming up to a concave corner.</p>
                         
                         <img class="lab_report_image_small" src="../../img/lab3/Corner Types.jpg">
-                        <img class="lab_report_image_small" src="../../img/lab3/Corner Scans.jpg">
+                        <img class="lab_report_image_small" src="../../img/lab3/Deriv_explanation.png">
                         
                         <p>Because we are already calculating a line of best fit to estimate the wall distance, this derivative is just the slope of that line. We define a gain on this derivative in computing our controller in order to more quickly respond to oncoming corners.</p>
                         
@@ -147,6 +147,7 @@
                         <p>Once we implemented the algorithm on the racecar, we adjusted parameters to make our controller more robust to factors that were not present in the simulation, such as other objects in its field of vision. We had to adjust the range of laser scan data we were using to calculate our distance estimation. At first, we were taking the arc sweeping from  from straight ahead to  past centerline. This allowed us to predict and adjust for oncoming corners better in simulation, but we found that when deployed on the racecar, the extra scan data from past centerline would consider readings from objects on the opposite side of the racecar from the wall in our distance estimation. With the corner prediction from the spatial derivative, we decided to change the range to $\pi/2$ from straight ahead to $\pi/8$ before centerline.</p>
                         
                         <img class="lab_report_image" src="../../img/lab3/wall follow error function.JPG">
+                        <p class="image_caption" style="text-align:center">Resulting Error Graph</p>
                         <!-- <p>** PLOTS OF AVERAGE ERROR FOR </p>
                         
                         <ol>

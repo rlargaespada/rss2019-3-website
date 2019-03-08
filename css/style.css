@@ -505,3 +505,8 @@ table tr td
     margin: auto;
     padding-bottom: 8px;
 }
+
+.image_caption {
+    text-align: center;
+    font-size: 12px;
+}
