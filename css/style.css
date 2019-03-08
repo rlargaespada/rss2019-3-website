@@ -490,3 +490,18 @@ table tr td
     max-width: 95%;
 }
 
+.lab_report_image {
+    max-width: 600px;
+    max-height: 500px;
+    display: block;
+    margin: auto;
+    padding-bottom: 8px;
+}
+
+.lab_report_image_small {
+    max-width: 200px;
+    max-height: 200px;
+    display: block;
+    margin: auto;
+    padding-bottom: 8px;
+}
