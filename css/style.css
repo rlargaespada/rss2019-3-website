@@ -163,10 +163,21 @@ ol li
     width: 98%;
 }
 
-.team_member_bio, .lab_link {
+.lab_link {
+    width: 30%;
+    float: left;
+    padding: 8px;
+    height: 200px;
+}
+
+.team_member_bio {
     width: 18%;
     float: left;
     padding: 0 8px;
+}
+
+.briefing_wrapper {
+    float: left;
 }
 
 .lab_link {position: relative;}
@@ -196,10 +207,18 @@ ol li
 
 .lab_image { /*fix with actual images*/
     display: block;
+    visibility: hidden;
     margin:auto;
     width: 100%;
-    height: 200px;
-    max-height: 200px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.lab_image_true { /*fix with actual images*/
+    display: block;
+    margin:auto;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -208,9 +227,18 @@ ol li
     background-color: #000;
     padding: 8px 16px;
     position: absolute;
-    top: 0;
     left: 0;
     margin-left: 8px;
+    font-size: 20px;
+    font-family: Palatino Linotype;
+}
+.briefing_link {
+    color: #FFF;
+    background-color: #000;
+    padding: 8px 16px;
+    top: 0;
+    left: 0;
+    margin: auto;
     font-size: 20px;
     font-family: Palatino Linotype;
 }
