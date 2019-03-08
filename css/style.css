@@ -483,3 +483,10 @@ table tr td
 { background: #eee;
   color: #555;
   border-top: 1px solid #FFF;}
+
+.lab_report_content {
+    font-family: Palatino Linotype;
+    font-size: 14.5px;
+    max-width: 95%;
+}
+
