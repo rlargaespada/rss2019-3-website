@@ -59,12 +59,13 @@
                             <li><a href="#sensor-model">Sensor Model (Alex)</a></li>
                             <ol>
                                 <li><a href="#data-preprocessing">Data Preprocessing (Kyle)</a></li>
-                                <li><a href="#pruning">Particle Pruning (Kyle)</a></li>
+                                <li><a href="#pruning">Particle Pruning (Alex)</a></li>
                             </ol>
                         </ol>
                         <li><a href='#ros'>ROS Implementation (Alex)</a></li>
                         <li><a href='#sim'>Simulation Results (Abbie)</a></li>
                         <li><a href='#exp'>Experimental Results (Alex)</a></li>
+                        <li><a href='#carto'>Google Cartographer (Kayla)</a></li>
                         <li><a href='#lab5videos'>Videos (Raul)</a></li>
                     </ol>
 
@@ -361,6 +362,16 @@
                     <p>
                         As shown, the error along any dimension with close or distinctive features has an error less than .1m and standard deviations less than .06m.  Conversely a dimension with far and indistinct features (i.e. the x dimension along the hallway) has a larger error.  The increased error is expected since the maximum range of the LIDAR is 10m, and the hallway gives few features defining the x dimension within 10m. However, overall we do not believe the level of error for indistinct dimensions compromises the success of our system. Such situations maintained an acceptable level of precision, especially given the high accuracy and low noise for tests in more detailed areas.  
                     </p>
+
+                    <h2><a name='carto'></a>Google Cartographer</h2>
+
+                    <p>
+                        To go one step further in this lab, we decided to implement cartographer, which provides real time SLAM (simultaneous localization and mapping), on our racecar. As its name suggest, SLAM allows the racecar to reliably construct a map of its previously unknown environment (in our case, the Stata basement) while keeping track of the location of the robot within that map. The cartographer system is split into two main subsystems: local SLAM (more specifically the local trajectory builder) and global SLAM. The job of local SLAM is to build a succession of sub-maps over time that are locally consistent, but can sometimes drift over time. Global SLAM fixes that problem: its job is to find loop closure constraints by matching scans against sub-maps.
+                    </p>
+
+                    <p>
+                        We were able to spend some time tuning the parameters of cartographer by following suggestions from the cartographer-ros documentation to make it run better. With cartographer, our robot was able to successfully create a map of the Stata basement with a layout very similar to the actual layout of the Stata basement. As shown in the video, cartographer sometimes lags a bit behind the racecar and in areas of the Stata basement without distinct features, the map is not always very accurate at first. However, in these cases the map quickly corrects with more data, converting to a better representation of the environment. Overall, cartographer works very well on the racecar. 
+                    </p>
                 
                     <h2 ><a name='lab5videos'></a>Videos</h2>
                     <h4>Particle Filture Simulation Results</h4>
@@ -372,8 +383,16 @@
                     <br>
                     <h4>Particle Filter Experimental Results</h4>
                     <video width="1280px" height="720px" controls>
-                            <source src='../../img/lab5/localization_experiment.mp4' type='video/mp4'>
+                        <source src='../../img/lab5/localization_experiment.mp4' type='video/mp4'>
                     </video>
+                    <br>
+                    <br>
+                    <br>
+                    <h4> Google Cartographer simultaneous localization and mapping</h4>
+                    <video width='1280px' height='720px' controls>
+                        <source src='../../img/lab5/racecar_cartographer_compressed.mp4' type='video/mp4'>
+                    </video>
+                    <p>Cartographer video at 4x speed.</p>
                 </div>
             </div>
             <footer id="image_footer" class="header_footer">
