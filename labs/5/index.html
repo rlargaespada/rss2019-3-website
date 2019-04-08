@@ -225,7 +225,9 @@
 
                     <h2 id="5experimentalresults"><a name='exp'></a>5. Experimental Results</h2>
 
-                    <p>To test the real world accuracy of the system, we setup two specific key points in the basement of Stata, one in a detailed environment and one in an empty hallway.  We drove the racecar over each keypoint four consecutive times, with thirty seconds of random driving between stops at the keypoints.  During each stop, we measured the x and y positions (in m) and theta (in rad) as shown below:</p>
+                    <p>
+                        To test the real world accuracy of the system, we setup two specific key points in the basement of Stata, one in a detailed environment and one in an empty hallway.  We drove the racecar over each keypoint four consecutive times, with thirty seconds of random driving between stops at the keypoints.  During each stop, we measured the x and y positions (in m) and $\theta$ (in rad).  We also took the average error and standard deviation as metrics for the correctness and consistency of the data.  
+                    </p>
 
                     <table>
                         <thead>
@@ -282,9 +284,7 @@
                         </tbody>
                     </table>
 
-                    <p>$\textbf{[1] Detailed environment: }  \text{Table shows data and analysis of consecutive stops along a specific point in a well detailed hallway in the Stata basement.}$ </p>
-                    <p>We have the ground truth position of the robot followed by the measured position along x, y, and theta.  Also shown is the average error and standard deviation across each metric.</p>
-
+                    <p>$\textbf{[1] Detailed environment: } \text{Table shows data and analysis of } \\ \text{consecutive stops along a specific point  in a well detailed area } \\ \text{of the Stata basement.}$
                     <table>
                         <thead>
                         <tr>
@@ -340,10 +340,11 @@
                         </tbody>
                     </table>
 
-                    <p>$\textbf{[2] Empty Hallway (along x direction)} \text{ Shows data and analysis of consecutive stops along a specific point in a poorly detailed hallway in the Stata basement.}$</p>  
-                    <p>We have the ground truth position of the robot followed by the measured position along x, y, and theta.  Also shown is the average error and standard deviation across each metric.</p>
+                    <p>$\textbf{[2] Empty Hallway (along x direction)} \text{Shows data }  \\ \text{and analysis of consecutive stops along a specific } \\ \text{point  in a poorly detailed hallway in the Stata } \\ \text{basement.}$
 
-                    <p>As shown, the error along any linear dimension with close or distinctive features has an error less than .1m, while a dimension with far and indistinct features (i.e. the x dimension along the hallway) has a larger error.  The increased error is expected since the maximum range of the LIDAR is 10m, and the hallway gives few features defining the x dimension within 10m. </p>
+                    <p>
+                        As shown, the error along any dimension with close or distinctive features has an error less than .1m and standard deviations less than .06m.  Conversely a dimension with far and indistinct features (i.e. the x dimension along the hallway) has a larger error.  The increased error is expected since the maximum range of the LIDAR is 10m, and the hallway gives few features defining the x dimension within 10m. However, overall we do not believe the level of error for indistinct dimensions compromises the success of our system. Such situations maintained an acceptable level of precision, especially given the high accuracy and low noise for tests in more detailed areas.  
+                    </p>
                 
                     <h2 ><a name='lab5videos'></a>Videos</h2>
                     <h4>Particle Filture Simulation Results</h4>
