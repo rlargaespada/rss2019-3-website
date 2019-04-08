@@ -42,6 +42,317 @@
             </header>
             <div id="content">
                 <h1 class="section_heading">Lab 5</h1>
+                <div class="briefing_wrapper">
+                    <a href="https://docs.google.com/presentation/d/1XaqoE-7pWkUXWJedwFRZ4_Fcorbxj_O1U67aGKkZMfU/edit?usp=sharing" target="_blank">
+                        <div class="briefing_link">Lab 5 Briefing</div>
+                    </a>
+                </div>
+                <div class='lab_report_content' >
+                    <h1 id="lab5localizationusingaparticlefiltermcl">Lab 5: Localization Using A Particle Filter (MCL)</h1>
+
+                    <h1 id="tableofcontents">Table of Contents</h1>
+                    <ol>
+                        <li><a href="#overview-motivation">Overview and Motivation</a></li>
+                        <li><a href="#monte-carlo">Monte Carlo Localization (Particle Filter Localization)</a></li>
+                        <ol>
+                            <li><a href="#motion-model">Motion Model</a></li>
+                            <li><a href="#sensor-model">Sensor Model</a></li>
+                            <ol>
+                                <li><a href="#data-preprocessing">Data Preprocessing</a></li>
+                                <li><a href="#pruning">Particle Pruning</a></li>
+                            </ol>
+                        </ol>
+                        <li><a href='#ros'>ROS Implementation</a></li>
+                        <li><a href='#sim'>Simulation Results</a></li>
+                        <li><a href='#exp'>Experimental Results</a></li>
+                        <li><a href='#lab5videos'>Videos</a></li>
+                    </ol>
+
+                    <a name='overview-motivation'></a>
+                    <h2 id="1overviewandmotivation">1. Overview and Motivation</h2>
+
+                    <p>Localization, determining a robot's pose in the global frame given a map, is necessary for autonomous driving. In this lab, we aim to design and implement a localization algorithm that converges quickly to the actual location of our racecar in the Stata basement.</p>
+
+                    <h2 id="2montecarlolocalizationparticlefilterlocalization" ><a name='monte-carlo'></a>2. Monte Carlo Localization (Particle Filter Localization)</h2>
+
+                    <p>The Monte Carlo Localization (MCL) algorithm combines a motion model and a sensor model in order to accurately model uncertainty in and provide a robust estimate of the racecar's actual location in the world. It represents a distribution of possible states as a collection of particles, each with an $xy$-coordinate and a heading. We initialize the point cloud around the initial position of the racecar by sampling 200 points from a Gaussian distribution centered around the point with a standard deviation of 0.5 meters in $xy$ and 0.5 radians in heading in order to model uncertainty in the initial estimate. When the racecar moves, the action taken by the racecar is applied to each particle to simulate the racecar moving from the configuration represented by that particle. Random noise is added to the movement to spread the particles out. Whenever the racecar receives a sensor reading, in this case a laser scan from the LIDAR, it resamples the particles based on how well the sensed data corresponds with the predicted state.</p>
+
+                    <h3 id="2.1motionmodel" ><a name='motion-model'></a>2.1 Motion Model</h3>
+
+                    <p>The motion model is based on linearized motion dynamics of the racecar. To propagate the particles, we take the current position of each particle and add to it the relevant odometry data with random Gaussian noise times the time increment passed since the particles were last updated. The added Gaussian noise has a standard deviation of 0.5 meters and a mean of 0. Because odometry data is received at irregular intervals, the time increment used is dynamically  changed as the program executes. The equations we use can be seen here:
+                    $$x_{new} = x +  (\frac{dx}{dt}+r)* \Delta t\quad  \text(1)$$ 
+                    $$y_{new} = y +  (\frac{dy}{dt}+r)* \Delta t \quad \text(2) $$
+                    $$\theta_{new} = \theta +  (\frac{d\theta}{dt}+r)* \Delta t \quad \text(3) $$</p>
+
+                    
+                    <table align="center">
+                        <thead>
+                        <tr>
+                        <th align="left">Symbol</th>
+                        <th align="left">Meaning</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td align="left">$x$</td>
+                        <td align="left">Racecar $x$ position</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$y$</td>
+                        <td align="left">Racecar $y$ position</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$\theta$</td>
+                        <td align="left">Racecar  heading</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$r$</td>
+                        <td align="left">Gaussian noise, mean of 0m, standard deviation of 0.5m</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$\Delta t$</td>
+                        <td align="left">Time increment</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p>Using this model we are able to effectively propagate particles for resampling with the sensor model.</p>
+
+                    <h3 id="2bsensormodel"><a  name='sensor-model'></a>2.2 Sensor Model</h3>
+
+                    <h4 id="2bidatapreprocessing" ><a name="data-preprocessing"></a>2.2.1 Data Preprocessing</h4>
+
+                    <p>In order to compare the simulated particle laser scans to the racecar’s laser scan, the probability that the simulated sensor has detected an object compared to the probability that the actual sensor detected an object must be computed. These probabilities incorporate four possible cases of a laserscan output: </p>
+
+                    <p>$$\text{Measurement represents ground truth: } p_{hit}$$
+                        $$p_{hit}(z_{t}| x_{t}, m)  = \begin{cases}
+                        \eta \frac{1}{\sqrt{2\pi\sigma^2}} \exp(-\frac{(z_t - z^*)^2}{2\sigma^2})  &amp;   \text{if} \quad 0 \leq z_{t} \leq z_{max}\\
+                        0   &amp;   \text{otherwise}\\
+                        \end{cases} \quad \text(4) $$ <br>
+
+                    $$ \text{Obstacles in front of ground truth: }p_{short}$$
+                        $$p_{short}(z_{t}| x_{t}, m) =  \frac{2}{z^*} \begin{cases}
+                        1 - \frac{z_{t}}{z^{*}}   &amp;   \text{if} \quad 0 \leq z_{t} \leq z^{*}\\
+                        0   &amp;   \text{otherwise} \\
+                        \end{cases} \quad \text(5) $$
+                    $$\text{Scan falls outside maximum range: } p_{max}$$
+                        $$p_{max}(z_{t}| x_{t}, m) =  \begin{cases}
+                        1  &amp;  \text{if} \quad z_t = z_{max}\\
+                        0   &amp;   \text{otherwise}\\
+                        \end{cases} \quad \text(6) $$
+                    $$\text{Scan is random noise: }p_{rand}$$
+                    $$p_{rand}(z_{t}| x_{t}, m) = \begin{cases}
+                        \frac{1}{z_{max}}  &amp;  \text{if} \quad 0\leq z_{t} &lt; z_{max}\\
+                        0   &amp;   \text{otherwise} \\
+                        \end{cases} \quad \text(7) $$</p>
+
+                    <table>
+                        <thead>
+                        <tr>
+                        <th align="left">Symbol</th>
+                        <th align="left">Meaning</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td align="left">$z_t$</td>
+                        <td align="left">Measured distance</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$z^*$</td>
+                        <td align="left">Ground truth distance</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$z_m$</td>
+                        <td align="left">Maximum measurement distance</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$\sigma$</td>
+                        <td align="left">$p_{hit}$ standard deviation</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$\eta$</td>
+                        <td align="left">Normalization constant</td>
+                        </tr>
+                        <tr>
+                        <td align="left">$m$</td>
+                        <td align="left">Static map</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p>We use $z_{m} = 10m$, $sigma = .5$, and $\eta = 0$.  Each of these four outcomes are added together for an overall distribution and normalized with weight coefficients $\alpha_{hit} = .74$, $\alpha_{short} = .07$, $\alpha_{max} = .07$, and $\alpha_{rand} = .12$. Note that all $\alpha$ values add up to 1, giving a normalized probability distribution: </p>
+
+                    <img src="../../img/lab5/1d distribution.JPG" class='lab-report-image'>
+
+                    <p>$ \textbf{[1] Total Probability Distribution: }  z_t \text{versus probability for a given ground}  \ \text{truth } z^{*} \text{shown in green.}$</p>
+
+                    <p>Computing the probability value for each laser in the scan of each particle is computationally expensive. In order to increase the maximum number of particles that can be run in real-time on the racecar, it is more efficient to precompute these values in a lookup table. Thus, the racecar must only lookup the values from the table as opposed to computing them discreetly, allowing for considerable runtime improvements and far greater numbers of particles in the model. Each entry in our lookup table is discretized in .05 m increments along $z_t$ and $z^*$.  </p>
+
+                    <img src='../../img/lab5/Screenshot 2019-04-06 17.11.24.png' class='lab-report-image' style="max-width: 716px;max-height: 512px;">
+
+                    <p>$\textbf{[2] Lookup Table Representation: }  z^{*}\text{ and } z_t \text{ represented along the bottom axes} \ \text{with the vertical axis representing the probability of such a pair.}$</p>
+
+                    <h4 id="2biiparticlepruning"><a name='pruning'></a>2.2.2 Particle Pruning</h4>
+
+                    <p>With a lookup table constructed, we can quantify the likelihood that each particle represents the racecar’s real position. The central step involves a process called ray-casting; given a map of the racecar’s environment, ray-casting will simulate the LIDAR scan appearing from the perspective of each particle. Each individual laser on each particle’s simulated scan will be compared to the corresponding laser on the observed LIDAR using the lookup table. For the lookup table, we use the simulated scan as the ground truth or $z*$ and the observed distance as $z_t$. Once we have probabilities for each scan on the ray-cast, we can average each particle’s simulated scan probabilities to get an overall score representing how well a particle matches with the observation. Normalizing all particles' scores therefore gives a probability distribution approximating how likely the racecar’s pose matches every particle relative to the other particles. We then update the set of particles by sampling particles based on this probability distribution. Statistically, resampling over several iterations results in keeping particles close to the observation from the LIDAR while pruning those which do not. However, it should be noted that pruning does not imply fewer particles; there is simply a higher chance that some high-scoring particle will get sampled multiple times while low-scoring particles will be sampled less or not at all.</p>
+
+                    <p>In the visualization, this pruning looks like a convergence of the point cloud.  </p>
+
+                    <h2 id="3rosimplementation"><a name='ros'></a>3. ROS Implementation</h2>
+
+                    <img src='../../img/lab5/rqt_graph_racecar.JPG' class='lab-report-image' style="max-width: 716px; max-height: 512px;">
+                    <p>$\textbf{[3] rqt graph: } \text{Representation of rosnodes and topics in our system}$</p>
+
+                    <p>The central ROS node controlling the localization is /particle_filter.  /particle_filter contains the motion model, sensor model, 
+                        and a variety of peripheral functionality concerning visualization and transformations.  It takes in data from /vesc_odom and 
+                        /laser to access the odometry and LIDAR data respectively, and uses them to inform the motion and sensor models.  The topic /initialpose 
+                        informs the initial position of the racecar.  The five main topics to which /particle_filter publishes are /particle_cloud, /visualization_marker, 
+                        /tf, /pose_for_path, and /odom_for_path.  /particle_cloud allows us to visualize particles as dots on the map. /visualization_marker constantly 
+                        publishes the average position of the particles as a representation of the model's guess as to the racecar's position.  /tf publishes a transformation 
+                        from the predicted position of the racecar to the map as an offset in x, y, and $\theta$.  The transformation is not needed in simulation since the 
+                        global frame can define the position of the map and racecar without need for an additional transformation. /pose_for_path and /odom_for_path publish 
+                        poses respectively defined by the model's guess of the racecar's position and the position guessed purely by odometry.  The node /make_path listens to 
+                        /pose_for_path and /odom_for_path and publishes path messages representing the robot's poses as predicted by our particle filter and raw odometry.  
+                        The path message for particle filter is published to the topic /path and the raw odometry estimate is published to /path_odom.  </p>
+
+                    <h2 id="4simulationresults"><a name='sim'></a>4. Simulation Results</h2>
+
+                    <h2 id="5experimentalresults"><a name='exp'></a>5. Experimental Results</h2>
+
+                    <p>To test the real world accuracy of the system, we setup two specific key points in the basement of Stata, one in a detailed environment and one in an empty hallway.  We drove the racecar over each keypoint four consecutive times, with thirty seconds of random driving between stops at the keypoints.  During each stop, we measured the x and y positions (in m) and theta (in rad) as shown below:</p>
+
+                    <table>
+                        <thead>
+                        <tr>
+                        <th align="left"></th>
+                        <th align="center">x (m)</th>
+                        <th align="center">y (m)</th>
+                        <th align="left">Theta (rad)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td align="left"><strong>Ground Truth</strong></td>
+                        <td align="center">-16.25</td>
+                        <td align="center">9.61</td>
+                        <td align="left">-1.97</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #1</strong></td>
+                        <td align="center">-16.15</td>
+                        <td align="center">9.58</td>
+                        <td align="left">-1.97</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #2</strong></td>
+                        <td align="center">-16.18</td>
+                        <td align="center">9.47</td>
+                        <td align="left">-1.98</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #3</strong></td>
+                        <td align="center">-16.20</td>
+                        <td align="center">9.56</td>
+                        <td align="left">-1.98</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #4</strong></td>
+                        <td align="center">-16.21</td>
+                        <td align="center">9.51</td>
+                        <td align="left">-1.98</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Avg Err</strong></td>
+                        <td align="center"><strong>.064</strong></td>
+                        <td align="center"><strong>.080</strong></td>
+                        <td align="left"><strong>0.0075</strong></td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Std Dev</strong></td>
+                        <td align="center"><strong>.037</strong></td>
+                        <td align="center"><strong>.055</strong></td>
+                        <td align="left"><strong>.005</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p>$\textbf{[1] Detailed environment: }  \text{Table shows data and analysis of consecutive stops along a specific point in a well detailed hallway in the Stata basement.}$ </p>
+                    <p>We have the ground truth position of the robot followed by the measured position along x, y, and theta.  Also shown is the average error and standard deviation across each metric.</p>
+
+                    <table>
+                        <thead>
+                        <tr>
+                        <th align="left"></th>
+                        <th align="center">x (m)</th>
+                        <th align="center">y (m)</th>
+                        <th align="left">Theta (rad)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                        <td align="left"><strong>Ground Truth</strong></td>
+                        <td align="center">-24.15</td>
+                        <td align="center">-2.26</td>
+                        <td align="left">-3.31</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #1</strong></td>
+                        <td align="center">-24.24</td>
+                        <td align="center">-2.37</td>
+                        <td align="left">-3.30</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #2</strong></td>
+                        <td align="center">-23.71</td>
+                        <td align="center">-2.23</td>
+                        <td align="left">-3.31</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #3</strong></td>
+                        <td align="center">-23.91</td>
+                        <td align="center">-2.26</td>
+                        <td align="left">-3.32</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Stop #4</strong></td>
+                        <td align="center">-23.78</td>
+                        <td align="center">-2.32</td>
+                        <td align="left">-3.32</td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Avg Err</strong></td>
+                        <td align="center"><strong>0.285</strong></td>
+                        <td align="center"><strong>0.050</strong></td>
+                        <td align="left"><strong>0.0075</strong></td>
+                        </tr>
+                        <tr>
+                        <td align="left"><strong>Std Dev</strong></td>
+                        <td align="center"><strong>0.023</strong></td>
+                        <td align="center"><strong>0.23</strong></td>
+                        <td align="left"><strong>.008</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p>$\textbf{[2] Empty Hallway (along x direction)} \text{ Shows data and analysis of consecutive stops along a specific point in a poorly detailed hallway in the Stata basement.}$</p>  
+                    <p>We have the ground truth position of the robot followed by the measured position along x, y, and theta.  Also shown is the average error and standard deviation across each metric.</p>
+
+                    <p>As shown, the error along any linear dimension with close or distinctive features has an error less than .1m, while a dimension with far and indistinct features (i.e. the x dimension along the hallway) has a larger error.  The increased error is expected since the maximum range of the LIDAR is 10m, and the hallway gives few features defining the x dimension within 10m. </p>
+                
+                    <h2 ><a name='lab5videos'></a>Videos</h2>
+                    <h4>Particle Filture Simulation Results</h4>
+                    <video width="1280px" height="720px" controls>
+                        <source src='../../img/lab5/localization_wall_sim.mp4' type='video/mp4'>
+                    </video>
+                    <br>
+                    <br>
+                    <br>
+                    <h4>Particle Filter Experimental Results</h4>
+                    <video width="1280px" height="720px" controls>
+                            <source src='../../img/lab5/localization_experiment.mp4' type='video/mp4'>
+                    </video>
+                </div>
             </div>
             <footer id="image_footer" class="header_footer">
                 <img class="banner_image" src="../../img/Boston_Back_Bay_reflection.jpg" style="top: -75px">

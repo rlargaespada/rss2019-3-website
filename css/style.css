@@ -30,6 +30,8 @@ h2
 { font: normal 175% 'century gothic', arial, sans-serif;
   color: #444;}
 
+h3 {font: normal 145% 'century gothic', arial, sans-serif;}
+
 h4, h5, h6
 { margin: 0;
   padding: 0 0 5px 0;
@@ -37,7 +39,7 @@ h4, h5, h6
   color: #555;}
 
 h5, h6
-{ font: italic 95% arial, sans-serif;
+{ font: italic 110% arial, sans-serif;
   padding: 0 0 15px 0;
   color: #000;}
 
