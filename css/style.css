@@ -163,6 +163,8 @@ ol li
 .section_heading {
     border-bottom: 1px solid #ccc!important;
     width: 98%;
+    font-size: 250%;
+    font-family: Palatino Linotype;
 }
 
 .lab_link {
