@@ -3,7 +3,7 @@ import os
 import mistune
 
 def make_markedown(directory):
-    readme = os.path.join(root, "README.md")
+    readme = os.path.join(root, "README2.md")
     if not os.path.isfile(readme):
         return
 
@@ -13,7 +13,7 @@ def make_markedown(directory):
     f = open(os.path.join(directory, "report.txt"), 'w+')
 
     # Add the text from the README
-    readme = os.path.join(directory, "README.md")
+    readme = os.path.join(directory, "README2.md")
     with open(readme, 'r') as readme_f:
         # prev_markdown = "."
         # for line in readme_f:
