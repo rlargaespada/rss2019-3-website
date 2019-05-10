@@ -41,7 +41,73 @@
                 </div>
             </header>
             <div id="content">
-                <h1 class="section_heading">Final Project</h1>
+                <h1 class="section_heading">Final Project: High Speed Obstacle Navigation</h1>
+                <div class="briefing_wrapper">
+                    <a href="https://docs.google.com/presentation/d/1FqeehGX0zPPwBxXkfAZokzB3WlM-uGsBpvuOsHBdqQc/edit?usp=sharing" target="_blank">
+                        <div class="briefing_link">Final Project Briefing</div>
+                    </a>
+                </div>
+                <div class="briefing_wrapper">
+                    <a href="https://docs.google.com/presentation/d/1-Q_jYL2WRGakExqrzTVlMW8so4RSkb8tKpQMgMjXZ00/edit?usp=sharing" target="_blank">
+                        <div class="briefing_link">Final Project Video</div>
+                    </a>
+                </div>
+                <div class="lab_report_content">
+                    <h1>Table of Contents</h1>
+                    <ol>
+                    <li>Overview and Motivation (Raul)</li>
+                    <li>Strategies<ol>
+                    <li>Mapping and A* (Raul)</li>
+                    <li>Greedy Optimal Heading</li>
+                    </ol>
+                    </li>
+                    <li>Comparison of Strategies</li>
+                    <li>Parameter Tuning<ol>
+                    <li>Particle Filter Tuning</li>
+                    <li>Algorithm Tuning (Raul)</li>
+                    </ol>
+                    </li>
+                    <li>ROS Implementation </li>
+                    <li>Experimental Results</li>
+                    <li>Future Work</li>
+                    </ol>
+                    <h2>1&#41; Overview and Motivation</h2>
+                    <ul>
+                        <li>Fast obstacle avoidance is an important problem in robotics</li>
+                        <li>Challenges are increased when obstacle locations are not known beforehand</li>
+                        <li>Wanted to develop a robust algorithm that would be able to navigate through a complex field of obstacles on the path towards a goal</li>
+                        <li>Anything else?</li>
+                    </ul>
+                    <h2>2&#41; Strategies and Ideas</h2>
+                    <h3>2.1&#41; Mapping and A*</h3>
+                    <ul>
+                        <li>Initial idea was to start with a graph representing the Stata basement and run A* from start to goal</li>
+                        <li>As obstacles were detected by the laser scan, nodes in the graph corresponding to those positions with obstacles would be removed and A* would be run again</li>
+                        <li>This process would potentially be augmented with specific mapping tools such as gmap</li>
+                        <li>We decided/discovered that this process would be too slow for real-time avoidance and switched to an algorithm that did not involve mapping.</li>
+                    </ul>
+                    <h4>Possible section: Dubins path planning? (Raul)</h4>
+                    <h3>2.2&#41; Greedy Optimal Heading</h3>
+                    <p>A second option for our algorithm involves greedy decision making rather than planning.  This algorithm checks sections of the laser scan data closest to the direction of the goal and makes two layers of checks to find the most fitting angle.  First, we check a large angle of scans around one such section and check the number of scans which fall under a short threshold.  If too many scans fall under this threshold, we mark the section as having immediate danger and remove it from the Racecar's possible headings.  If a section passes this first layer, we analyze a narrower slice and assign a score based on 3 parameters.  Firstly, we check the proportion of numbers greater than some distant threshold (approximately three times the distance of the first).  Second, we check the angle between the proposed section and the scan the goal.  This parameter ensures we consistently move toward the goal as much as possible.  Finally, we check the angle between the current heading and proposed section of the scan, which helps maintain the stability of our path and reduce oscillations which slow progress and can lead to collision.  Weighting and comparing these scores across all the sections gives us an optimal direction in which to steer.  We then use an stabilized Ackermann steering model to approach the point chosen.  <strong>opison of ratees  aramete in  rtce tee</strong> (fix the bold part, I think it got messed up somehow) our algorithm relies largely on the laser scan data alone, having a rudimentary understanding of our location on the map remains necessary.  Specifically, maintaining a general understanding of our heading was important for the purposes of knowing our angle to the goal.  However, while our localization proved reliable when in a known environment, the obstacle field naturally included many unknown and unmapped obstacles, throwing the localization wildly off during testing.  To mitigate these problems, we modified the particle filter's probability distribution to reflect the introduction of new obstacles.  Specifically, we raised the weight for the probability of a laser scan to measure a distances shorter than expected from .07 to .40, and lowered the probability of a distance approximately equal to that expected from the map from .74 to .41.  By indicating the higher probability of closer than expected objects, our localization became robust enough to the unmapped obstacles to maintain a heading and lead the Racecar to the proper goal.</p>
+                    <p>(Does this go in ROS implementation?)
+                    The main ROS node active in our algorithm is named /obstacle_avoidance.  This node takes in localization data as a PoseStamped message from the topic /pf/viz/inferred_pose and laser scan data from the topic /scan.  It then outputs data as an Ackermann message to the topic /vesc/high_level/ackermann_cmd_mux/input/nav_0.  While these topics envelop the technical functionality of our system, we also utilize the topics /heading and /safety as visualization tools.  /heading displays the optimal heading determined by our algorithm as a cone of the angle defined as our section size and length of our clearance distance threshold.  Similarly, /safety is a cone displaying the angle, direction, and threshold of our safety section.  whenever possible.</p>
+                    <h2>3&#41; Comparison of Strategies</h2>
+                    <h2>4&#41; Parameter Tuning</h2>
+                    <h3>4.1&#41; Particle Filter Tuning</h3>
+                    <ul>
+                    <li>p_short goes up</li>
+                    </ul>
+                    <h3>4.2&#41; Algorithm Tuning</h3>
+                    <ul>
+                        <li>Many variables to tune: Ackermann steering parameters, clearance thresholds, sections sweep parameters, velocity controls, acceleration limits, gains on controller</li>
+                        <li>Wanted something that would be robust enough to work on most possible courses</li>
+                        <li>Took a lot of time, eventually was able to reach consistent performance </li>
+                        <li>Key was to lower gain on keeping a straight path so that car was willing to turn more aggressively and to lower its max acceleration so that it wouldn't speed ahead and fail to slow down in time</li>
+                    </ul>
+                    <h2>5&#41; ROS Implementation</h2>
+                    <h2>6&#41; Experimental Results</h2>
+                    <h2>7&#41; Future Work</h2>
+                </div>
             </div>
             <footer id="image_footer" class="header_footer">
                 <img class="banner_image" src="../../img/Boston_Back_Bay_reflection.jpg" style="top: -75px">
